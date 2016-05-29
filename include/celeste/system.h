@@ -1,8 +1,6 @@
 #ifndef _CELESTE_SYSTEM_H_
 #define _CELESTE_SYSTEM_H_
 
-#include <cmath>
-#include <cfloat>
 #include <vector>
 
 #include "celeste/central_body.h"
@@ -12,15 +10,24 @@ namespace celeste {
 
 class System {
 public:
-    System (CentralBody& central) : central_body_(central) {};
+    System () {};
+    System (CentralBody central) : central_(central) {};
     void add_body (Body body) {
-        body.set_central(&central_body_);
-        orbiting_bodies_.push_back(body);
+        bodies_.push_back(body);
     };
 
+    size_t size () const {
+        size_t count = central_.size();
+        for (size_t i = 0; i < bodies_.size(); ++i) count += bodies_[i].size();
+        return count;
+    };
+
+    CentralBody& central () { return central_; };
+    Body& body (size_t index = 0) { return bodies_[index]; };
+
 private:
-    CentralBody central_body_;
-    std::vector<Body> orbiting_bodies_;
+    CentralBody central_;
+    std::vector<Body> bodies_;
 
 };  // class System
 
