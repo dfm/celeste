@@ -1,15 +1,17 @@
 #ifndef _CELESTE_CENTRAL_BODY_H_
 #define _CELESTE_CENTRAL_BODY_H_
 
+#include <vector>
+
 #include "celeste/parameter.h"
 
 namespace celeste {
 
-class CentralBody {
+class CentralBody : public ParameterizedModel {
 friend class System;
 public:
     // The parameters are public to enable freezing and thawing.
-    Parameter<double> log_mass, log_radius;
+    Parameter log_mass, log_radius;
 
     CentralBody(
         double log_mass0 = 0.0,      // Solar masses
@@ -18,28 +20,15 @@ public:
         : log_mass(log_mass0),
           log_radius(log_radius0) {};
 
-    // Get the size of the unfrozen parameter vector.
-    size_t size () const {
-        size_t count = 0;
-        COUNT_PARAM(log_mass)
-        COUNT_PARAM(log_radius)
-        return count;
-    };
-
-private:
-    // Parameter vector interface.
-    size_t get_parameter_vector (double* params) const {
-        size_t count = 0;
+    size_t full_size () const { return 2; };
+    GET_PARAM_FUNCTION(
         GET_PARAM(log_mass)
         GET_PARAM(log_radius)
-        return count;
-    };
-    size_t set_parameter_vector (const double* params) {
-        size_t count = 0;
+    )
+    SET_PARAM_FUNCTION(
         SET_PARAM(log_mass)
         SET_PARAM(log_radius)
-        return count;
-    };
+    )
 
 };  // class CentralBody
 
