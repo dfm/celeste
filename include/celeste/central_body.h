@@ -6,6 +6,7 @@
 namespace celeste {
 
 class CentralBody {
+friend class System;
 public:
     // The parameters are public to enable freezing and thawing.
     Parameter<double> log_mass, log_radius;
@@ -25,16 +26,19 @@ public:
         return count;
     };
 
+private:
     // Parameter vector interface.
-    void get_parameter_vector (double* params) const {
+    size_t get_parameter_vector (double* params) const {
         size_t count = 0;
         GET_PARAM(log_mass)
         GET_PARAM(log_radius)
+        return count;
     };
-    void set_parameter_vector (const double* params) {
+    size_t set_parameter_vector (const double* params) {
         size_t count = 0;
         SET_PARAM(log_mass)
         SET_PARAM(log_radius)
+        return count;
     };
 
 };  // class CentralBody
